@@ -283,7 +283,7 @@ type Options struct {
 	// types of images and compressors. For example, it works well for
 	// photos with Deflate compression.
 	Predictor bool
-	Resolution uint
+	Resolution uint32
 }
 
 // Encode writes the image m to w. opt determines the options used for
@@ -294,7 +294,7 @@ func Encode(w io.Writer, m image.Image, opt *Options) error {
 
 	compression := uint32(cNone)
 	predictor := false
-	resolution := 300
+	resolution := uint32(300)
 	if opt != nil {
 		compression = opt.Compression.specValue()
 		// The predictor field is only used with LZW. See page 64 of the spec.
