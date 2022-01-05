@@ -419,9 +419,9 @@ func Encode(w io.Writer, m image.Image, opt *Options) error {
 		{tRowsPerStrip, dtShort, []uint32{uint32(d.Y)}},
 		{tStripByteCounts, dtLong, []uint32{uint32(imageLen)}},
 		// There is currently no support for storing the image
-		// resolution, so give a bogus value of 72x72 dpi.
-		{tXResolution, dtRational, []uint32{72, 1}},
-		{tYResolution, dtRational, []uint32{72, 1}},
+		// resolution, so give a bogus value of 300x300 dpi.
+		{tXResolution, dtRational, []uint32{300, 1}},
+		{tYResolution, dtRational, []uint32{300, 1}},
 		{tResolutionUnit, dtShort, []uint32{resPerInch}},
 	}
 	if pr != prNone {
