@@ -283,6 +283,7 @@ type Options struct {
 	// types of images and compressors. For example, it works well for
 	// photos with Deflate compression.
 	Predictor bool
+	Resolution uint
 }
 
 // Encode writes the image m to w. opt determines the options used for
@@ -293,10 +294,12 @@ func Encode(w io.Writer, m image.Image, opt *Options) error {
 
 	compression := uint32(cNone)
 	predictor := false
+	resolution := 300
 	if opt != nil {
 		compression = opt.Compression.specValue()
 		// The predictor field is only used with LZW. See page 64 of the spec.
 		predictor = opt.Predictor && compression == cLZW
+		resolution = opt.Resolution
 	}
 
 	_, err := io.WriteString(w, leHeader)
@@ -418,10 +421,8 @@ func Encode(w io.Writer, m image.Image, opt *Options) error {
 		{tSamplesPerPixel, dtShort, []uint32{samplesPerPixel}},
 		{tRowsPerStrip, dtShort, []uint32{uint32(d.Y)}},
 		{tStripByteCounts, dtLong, []uint32{uint32(imageLen)}},
-		// There is currently no support for storing the image
-		// resolution, so give a bogus value of 300x300 dpi.
-		{tXResolution, dtRational, []uint32{300, 1}},
-		{tYResolution, dtRational, []uint32{300, 1}},
+		{tXResolution, dtRational, []uint32{resolution, 1}},
+		{tYResolution, dtRational, []uint32{resolution, 1}},
 		{tResolutionUnit, dtShort, []uint32{resPerInch}},
 	}
 	if pr != prNone {
